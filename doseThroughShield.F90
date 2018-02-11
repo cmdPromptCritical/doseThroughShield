@@ -9,6 +9,8 @@ r (distance from source to target, m)
 #endif
 ! -----------------------------------------------Declare
 INTEGER sourceActivity, photonE, x, r
+REAL, dimension(:), allocatable :: mu(:,:)
+INTEGER :: n
 REAL flux
 
 real tempC, tempF, FACTOR
@@ -26,9 +28,18 @@ read*, x
 
 print*, "Enter the distance from the source to the target, in meters"
 read*, r
+
+! -----------------------------------------------LoadData
+open (unit=99, file='massCoeff_Fe.txt', status='old', action='read')
+read(99, *) n
+allocate(mu(n, 2))
+read(99,*) mu
+
+
 ! -----------------------------------------------Compute
 flux = (sourceActivity * exp(3.0))
 
+print*, mu(2,1)
 ! -----------------------------------------------Output
 print*, "The corresponding Centigrade temperature is "
 print*, flux, " degrees."
