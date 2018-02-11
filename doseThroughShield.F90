@@ -8,7 +8,7 @@ x (shield thickness, m),
 r (distance from source to target, m)
 #endif
 ! -----------------------------------------------Declare
-INTEGER sourceActivity, photonE, x, r
+INTEGER sourceActivity, photonE, x, r, k
 REAL, dimension(:), allocatable :: mu(:,:)
 INTEGER :: n
 REAL flux
@@ -33,13 +33,19 @@ read*, r
 open (unit=99, file='massCoeff_Fe.txt', status='old', action='read')
 read(99, *) n
 allocate(mu(n, 2))
-read(99,*) mu
+
+k = 1
+do while (k <= n)
+  read(99,*) mu(k, 1:2)
+
+  k = k + 1
+end do
 
 
 ! -----------------------------------------------Compute
 flux = (sourceActivity * exp(3.0))
 
-print*, mu(2,1)
+print*, mu(sourceActivity,photonE)
 ! -----------------------------------------------Output
 print*, "The corresponding Centigrade temperature is "
 print*, flux, " degrees."
