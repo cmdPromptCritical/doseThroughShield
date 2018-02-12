@@ -11,7 +11,7 @@ r (distance from source to target, m)
 INTEGER k, j
 REAL, dimension(:), allocatable :: murhodb(:,:)
 INTEGER :: n
-REAL flux, linInterp, murho, shieldDensity, photonE, x, r, sourceActivity
+REAL flux, linInterp, murho, shieldDensity, photonE, x, r, sourceActivity, doseRate
 
 real tempC, tempF, FACTOR
 integer ZERO_SHIFT
@@ -52,10 +52,13 @@ print*, (5 - 1) * (40 - 20) / (10 - 1) + 10, "Linear interpolation, manual"
 print*, murho(photonE, murhodb, n)
 
 flux = (sourceActivity * exp(-1.0*murho(photonE, murhodb, n)*shieldDensity*x)) / (4.0*3.14159*r**2.0)
-print*, flux
+! dose rate in Sv/hr
+doseRate = flux * photonE * 1.6022e-13 * murho(photonE, murhodb, n) * 1000 * 3600
+
 ! -----------------------------------------------Output
 print*, "The corresponding Centigrade temperature is "
-print*, flux, " degrees."
+print*, flux, " - flux (cm^-2 * s^-1)"
+print*, doseRate, " - dose rate (Sv/hr)"
 end
 
 FUNCTION linInterp(x1, x2, x3, y1, y3) result(y2)
